@@ -1,0 +1,34 @@
+# run on container based infrastructure
+sudo: false
+
+language: node_js
+node_js:
+  - "5"
+
+cache:
+  directories:
+    - "./node_modules"
+
+branches:
+  except:
+    - "/^v[0-9]/" # dont build tags separately as they are build anyway for the push
+
+install:
+  - npm prune
+  - npm install
+
+script:
+  - npm run eslint
+  - npm test
+
+deploy:
+  provider: npm
+  email: npm@blogfoster.com
+  api_key:
+    secure: "Iu8KUexra9gxWIMA36lo5Gpt5r+w34mi/7slFsJ39ov8fG0ow79inAeRIlNWZvkJNjrOphW7zkXgLSWcSDOBPSaExVaxzgTr3smHykN24orXLaZbkhU2866TNgAAs6RHxXXEh5OJ0E33EGFVwbJgIEPDFM/KNEeGekym1S3JQdVynIaC4c/Qy61aefW3MVEnqVLbYyVK8lzg2U3OdYOnJCdWZys3t8xVd+5ztyEGhrbjoDdMosUk7e1SVnjcpvZkhWZY8SUE6oMa7VcmgANchD8xmdg/SqA1jEBlRQ5szQ5P+YIwIhJ1z4BwH4+es+CAKVoSkL6Ow2HJ2+Jh61U6WvGjrZ+F4A/Xytp0aLxnJYiC5DIJgRBAdk1dS/cU20iIUtSkkytFIY51Nl5BuRXgcLyBUHzwPfdB9EZoxOs52qkIM89Ee+uAacaOiX+YHDiIoSXJEHidnaxdcsJb/klQMBwkrYr5TEu9Rcd/jMOjYPzphhpZ5NpvICTkIDVb3ATBuss0hRGjTHoLmmJhos+oSJ/KHSUYVVEN5lLrmAlQZd90HnF/DnjA9wz/1sbEoa3Djlb84wOrHTfTA/Xa1p2ofXTgTc4+3I9dtxovbq6QSZbOo4ESQ6O3P/luLzySOHo2/1GEPGX0+kWTWLcLQThgC85XZaTdn8PF82uPt78XtRo="
+  wait-until-deployed: true
+  skip_cleanup: true
+  on:
+    repo: blogfoster/hapi-error-logger
+    branch: master
+    condition: "$(git describe --exact-match HEAD)" # only deploy if the commit is referenced by a tag as well
