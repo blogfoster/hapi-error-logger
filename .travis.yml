@@ -32,3 +32,9 @@ deploy:
     repo: blogfoster/hapi-error-logger
     branch: master
     condition: "$(git describe --exact-match HEAD)" # only deploy if the commit is referenced by a tag as well
+
+notifications:
+  slack:
+    rooms:
+      - secure: "HTrlYDtoPydGGBl3eSIZGErVFge5BBwseywaQBpqcFpi2iMU/WC38v0jgCgVOPWOy4sucni47DHcmcxH+scBzD/fMlHUj5CScUXKbzV1Hse5fXXRQyYH0ShsxFWFI5lIrBO5+7O24r7Tj2k77WFzP/P2zVYTc8JwFgXM054YLZiJxgeGsfs110Q1sNDJM5MHJhKxKE4IHn3hGuQjhF2Grb55UBp3kcBsw7y8VskN2t18tnueYSLY0OWRW8iUapvGZZC1S6Sl4QIMWgEM7dw9vKceyqlz4cvjOryjvvVRiOu024sgCodj9Xw96YARI7Z1A7ytj35IEQ/rEIo3RGiZ4IexGQXhCXRL8IWc8bbfeRj9M5mBqjOhSOkYBuTeUaXi4k8xxuqEJ8Vfna/PF2wlWM8S7JgnCext5ciE4PVXiYD0+Z3ht5UUE6xAdNgLdzQC3EQ0iOjczWDE/veYaBOyirKYD0Lrgewn0gs6b+BResesyalvMvm0Kuo5o4WpSHubWUGzBNXMBfe8dcOSClUmuAWXI2F02W2c2BW7NHd/MvhNbmprpNNmx8GKrc7m+XqH5h3Z7Pp2pEzx67/y5OXPe/PK/iBs4D3w30nOsX/ah/21NQV7+XF4Yf0VXESlww1PoH4nmK30I57xoduTg4tRTgydRwS9wTMcASv/4mbno+g="
+    on_pull_requests: false
