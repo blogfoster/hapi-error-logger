@@ -16,6 +16,8 @@
   },
   "keywords": [
     "hapi",
+    "hapi-plugin",
+    "plugin",
     "logging",
     "errors",
     "error-logger"
@@ -27,22 +29,22 @@
   },
   "homepage": "https://github.com/blogfoster/hapi-error-logger#readme",
   "dependencies": {
-    "joi": "^8.4.0"
+    "joi": "^9.0.4"
   },
   "devDependencies": {
-    "babel-cli": "^6.9.0",
-    "babel-core": "^6.9.1",
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.11.4",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-0": "^6.5.0",
-    "boom": "^3.2.1",
-    "eslint": "^2.11.1",
-    "eslint-config-blogfoster": "^1.3.2",
-    "expect": "^1.20.1",
-    "hapi": "^13.4.1",
+    "boom": "^3.2.2",
+    "eslint": "^3.1.1",
+    "eslint-config-blogfoster": "^1.4.0",
+    "expect": "^1.20.2",
+    "hapi": "^13.5.0",
     "isparta": "^4.0.0",
     "mocha": "^2.5.3",
     "nock": "^8.0.0",
-    "request-promise": "^3.0.0",
+    "request-promise": "^4.0.2",
     "sinon": "^1.17.4"
   },
   "files": [
