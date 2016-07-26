@@ -3,15 +3,15 @@ sudo: false
 
 language: node_js
 node_js:
-  - "5"
+  - '5'
 
 cache:
   directories:
-    - "./node_modules"
+    - ./node_modules
 
 branches:
   except:
-    - "/^v[0-9]/" # dont build tags separately as they are build anyway for the push
+    - /^v[0-9]/ # dont build tags separately as they are build anyway for the push
 
 install:
   - npm prune
@@ -31,7 +31,7 @@ deploy:
   on:
     repo: blogfoster/hapi-error-logger
     branch: master
-    condition: "$(git describe --exact-match HEAD)" # only deploy if the commit is referenced by a tag as well
+    condition: $(git describe --exact-match HEAD) # only deploy if the commit is referenced by a tag as well
 
 notifications:
   slack:
