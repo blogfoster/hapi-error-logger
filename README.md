@@ -30,6 +30,23 @@ server.register([
 
 - `replyWithStack` *optional*, default: `false`, if set your response will have an error stack attached if available.
 
+## error api
+
+- `error.data.skipLogs` *optional*, default: `false`, if set this error response will not be logged
+
+```js
+const Boom = require('boom');
+
+// this is a handler definition
+const Handler = {
+  getError(request, reply) {
+    const err = Boom.badGateway('could not reach server XXX', { skipLogs: true });
+
+    return reply(err);
+  }
+}
+```
+
 ## development
 
 - npm

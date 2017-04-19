@@ -26,7 +26,10 @@ internals.plugin = {
       if (response && response.isBoom && response.isServer) {
         const error = response.error || response.message;
 
-        request.log([ 'error' ], error);
+        // skip logging if `error.data.skipLogs` is set
+        if (!error.data || !error.data.skipLogs) {
+          request.log([ 'error' ], error);
+        }
 
         if (pluginOpts.replyWithStack) {
           response.output.payload.stack = response.stack;
