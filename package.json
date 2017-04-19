@@ -1,6 +1,6 @@
 {
   "name": "hapi-error-logger",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Log hapi errors",
   "main": "source/index.js",
   "scripts": {
