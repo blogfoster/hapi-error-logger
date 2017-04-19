@@ -1,4 +1,4 @@
-import Joi from 'joi';
+const Joi = require('joi');
 
 const PluginScheme = Joi.object().keys({
   replyWithStack: Joi.bool().optional().default(false)
@@ -34,4 +34,5 @@ plugin.register.attributes = {
   name: 'hapi-error-logger'
 };
 
-export default plugin;
+
+module.exports = plugin;

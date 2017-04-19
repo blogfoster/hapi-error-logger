@@ -1,11 +1,11 @@
-import expect from 'expect';
-import Hapi from 'hapi';
-import Sinon from 'sinon';
-import Boom from 'boom';
-import rp from 'request-promise';
-import nock from 'nock';
+const expect = require('expect');
+const Hapi = require('hapi');
+const Sinon = require('sinon');
+const Boom = require('boom');
+const rp = require('request-promise');
+const nock = require('nock');
 
-import HapiErrorLogger from '../../source';
+const HapiErrorLogger = require('../../source');
 
 describe('[integration/plugin]', function () {
   let server;
