@@ -27,7 +27,7 @@ internals.plugin = {
         const error = response.error || response.message;
 
         // skip logging if `error.data.skipLogs` is set
-        if (!error.data || !error.data.skipLogs) {
+        if (!response.data || !response.data.skipLogs) {
           request.log([ 'error' ], error);
         }
 
