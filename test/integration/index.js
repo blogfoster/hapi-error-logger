@@ -1,3 +1,5 @@
+/* eslint prefer-arrow-callback: 0 */
+
 const expect = require('expect');
 const Hapi = require('hapi');
 const Sinon = require('sinon');
