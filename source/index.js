@@ -1,12 +1,22 @@
-import Joi from 'joi';
+const Joi = require('joi');
 
-const PluginScheme = Joi.object().keys({
-  replyWithStack: Joi.bool().optional().default(false)
-}).optional().default({});
+const internals = {};
 
-const plugin = {
+
+internals.PluginScheme = Joi.object()
+  .keys({
+    replyWithStack: Joi.bool()
+      .optional()
+      .default(false)
+      .description('whether to add the stack as part of external error payload')
+  })
+  .optional()
+  .default({});
+
+
+internals.plugin = {
   register(server, options, next) {
-    const pluginOpts = Joi.attempt(options, PluginScheme);
+    const pluginOpts = Joi.attempt(options, internals.PluginScheme);
 
     // register post respose handler that logs 5xx request
     server.ext('onPreResponse', (request, reply) => {
@@ -16,7 +26,10 @@ const plugin = {
       if (response && response.isBoom && response.isServer) {
         const error = response.error || response.message;
 
-        request.log([ 'error' ], error);
+        // skip logging if `error.data.skipLogs` is set
+        if (!response.data || !response.data.skipLogs) {
+          request.log([ 'error' ], error);
+        }
 
         if (pluginOpts.replyWithStack) {
           response.output.payload.stack = response.stack;
@@ -30,8 +43,10 @@ const plugin = {
   }
 };
 
-plugin.register.attributes = {
+
+internals.plugin.register.attributes = {
   name: 'hapi-error-logger'
 };
 
-export default plugin;
+
+module.exports = internals.plugin;
