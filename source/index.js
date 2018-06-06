@@ -1,25 +1,24 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
-const internals = {};
-
-
-internals.PluginScheme = Joi.object()
+const PluginSchema = Joi.object()
   .keys({
     replyWithStack: Joi.bool()
       .optional()
       .default(false)
-      .description('whether to add the stack as part of external error payload')
+      .description(
+        'whether to add the stack as part of external error payload',
+      ),
   })
   .optional()
   .default({});
 
+const Plugin = {
+  name: 'hapi-error-logger',
+  register(server, options) {
+    const pluginOpts = Joi.attempt(options, PluginSchema);
 
-internals.plugin = {
-  register(server, options, next) {
-    const pluginOpts = Joi.attempt(options, internals.PluginScheme);
-
-    // register post respose handler that logs 5xx request
-    server.ext('onPreResponse', (request, reply) => {
+    // register post response handler that logs 5xx request
+    server.ext('onPreResponse', request => {
       const { response } = request;
 
       // isServer: convenience bool indicating status code >= 500
@@ -28,7 +27,7 @@ internals.plugin = {
 
         // skip logging if `error.data.skipLogs` is set
         if (!response.data || !response.data.skipLogs) {
-          request.log([ 'error' ], error);
+          request.log(['error'], error);
         }
 
         if (pluginOpts.replyWithStack) {
@@ -36,17 +35,9 @@ internals.plugin = {
         }
       }
 
-      return reply.continue(response);
+      return response;
     });
-
-    return next();
-  }
+  },
 };
 
-
-internals.plugin.register.attributes = {
-  name: 'hapi-error-logger'
-};
-
-
-module.exports = internals.plugin;
+export default Plugin;

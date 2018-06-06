@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-proposal-export-default-from"
+  ],
+  "sourceMaps": "inline"
+}
