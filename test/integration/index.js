@@ -1,128 +1,133 @@
 /* eslint prefer-arrow-callback: 0 */
 
-const expect = require('expect');
-const Hapi = require('hapi');
-const Sinon = require('sinon');
-const Boom = require('boom');
-const rp = require('request-promise');
-const nock = require('nock');
+import expect from 'expect';
+import Hapi from 'hapi';
+import Sinon from 'sinon';
+import Boom from 'boom';
+import rp from 'request-promise';
+import nock from 'nock';
 
-const HapiErrorLogger = require('../../source');
+import HapiErrorLogger from '../../source';
 
-describe('[integration/plugin]', function () {
+describe('[integration/plugin]', function() {
   let server;
   let requestStub;
   let requestErrorStub;
   const error = Boom.badImplementation('what should i say');
 
-  before('create a hapi server', function () {
-    server = new Hapi.Server();
-    server.connection({ host: '127.0.0.1', port: 8080 });
+  before('create a hapi server', function() {
+    server = Hapi.Server({ host: '127.0.0.1', port: 8080 });
     return server.register([
       // hapi-error-logger plugin integration
       {
-        register: HapiErrorLogger,
+        plugin: HapiErrorLogger,
         options: {
-          replyWithStack: true
-        }
-      }
+          replyWithStack: true,
+        },
+      },
     ]);
   });
 
-  before('register a route that fails', function () {
+  before('register a route that fails', function() {
     return server.route({
       method: 'GET',
       path: '/fail',
-      handler(request, reply) {
+      handler(request) {
         requestStub = Sinon.stub(request, 'log');
 
-        return reply(error);
-      }
+        return error;
+      },
     });
   });
 
-  before('register a route with an external http call', function () {
+  before('register a route with an external http call', function() {
     return server.route({
       method: 'GET',
       path: '/request-error',
-      handler(request, reply) {
+      handler(request) {
         requestErrorStub = Sinon.stub(request, 'log');
 
         return rp({
           method: 'GET',
           uri: 'http://test.com/stuff',
-          json: true
-        })
-        .then(reply)
-        .catch(reply);
-      }
+          json: true,
+        });
+      },
     });
   });
 
-  before('init hapi server', function () {
+  before('init hapi server', function() {
     return server.initialize();
   });
 
-  after('stop hapi server', function () {
+  after('stop hapi server', function() {
     return server.stop();
   });
 
-  describe('internal error', function () {
+  describe('internal error', function() {
     let response;
     let payload;
 
-    before('call failing route', function () {
-      return server.inject({
-        method: 'GET',
-        url: '/fail'
-      })
-      .then((resp) => {
-        response = resp;
-      });
+    before('call failing route', function() {
+      return server
+        .inject({
+          method: 'GET',
+          url: '/fail',
+        })
+        .then(resp => {
+          response = resp;
+        });
     });
 
-    before(function () {
+    before(function() {
       payload = JSON.parse(response.payload);
     });
 
-    it('should log the error', function () {
-      expect(requestStub.calledWith([ 'error' ], 'what should i say')).toEqual(true);
+    it('should log the error', function() {
+      expect(requestStub.calledWith(['error'], 'what should i say')).toEqual(
+        true,
+      );
     });
 
-    it('should respond with the stack if configured', function () {
+    it('should respond with the stack if configured', function() {
       expect(payload.stack).toExist();
     });
   });
 
-  describe('request error', function () {
+  describe('request error', function() {
     let response;
     let payload;
 
-    before('nock', function () {
+    before('nock', function() {
       return nock('http://test.com')
         .get('/stuff')
         .reply(500, { error: 'internal server error' });
     });
 
-    before('call failing route', function () {
-      return server.inject({
-        method: 'GET',
-        url: '/request-error'
-      })
-      .then((resp) => {
-        response = resp;
-      });
+    before('call failing route', function() {
+      return server
+        .inject({
+          method: 'GET',
+          url: '/request-error',
+        })
+        .then(resp => {
+          response = resp;
+        });
     });
 
-    before(function () {
+    before(function() {
       payload = JSON.parse(response.payload);
     });
 
-    it('should log the error', function () {
-      expect(requestErrorStub.calledWith([ 'error' ], { error: 'internal server error' })).toEqual(true);
+    it('should log the error', function() {
+      expect(
+        requestErrorStub.calledWith(['error'], {
+          error: 'internal server error',
+        }),
+      ).toEqual(true);
     });
 
-    it('should respond with the stack if configured', function () {
+    it('should respond with the stack if configured', function() {
       expect(payload.stack).toExist();
     });
   });

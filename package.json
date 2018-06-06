@@ -2,10 +2,15 @@
   "name": "hapi-error-logger",
   "version": "0.2.0",
   "description": "Log hapi errors",
-  "main": "source/index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "test": "mocha",
-    "eslint": "eslint ."
+    "prepublish": "npm run compile",
+    "compile": "rm -rf ./lib && babel -d ./lib ./source -s",
+    "test": "NODE_ENV=test mocha 'test/**/*.js'",
+    "_eslint": "eslint . --cache --cache-location ./node_modules/.cache/eslintcache",
+    "_prettier": "prettier --config .prettierrc.js '**/*.{js,json}'",
+    "check": "npm run _prettier -- --list-different && npm run _eslint",
+    "fix": "npm run _eslint -- --fix; npm run _prettier -- --write"
   },
   "repository": "blogfoster/hapi-error-logger",
   "keywords": [
@@ -23,21 +28,27 @@
   },
   "homepage": "https://github.com/blogfoster/hapi-error-logger#readme",
   "dependencies": {
-    "joi": "^10.4.1"
+    "joi": "^13.4.0"
   },
   "devDependencies": {
-    "boom": "^4.3.1",
-    "eslint": "^3.19.0",
-    "eslint-config-blogfoster": "^1.8.0",
+    "@babel/cli": "^7.0.0-beta.49",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.49",
+    "@babel/plugin-transform-modules-commonjs": "^7.0.0-beta.49",
+    "@babel/register": "^7.0.0-beta.49",
+    "boom": "^7.2.0",
+    "eslint": "^4.19.1",
+    "eslint-config-blogfoster": "^1.11.3",
     "expect": "^1.20.2",
-    "hapi": "^16.1.1",
-    "mocha": "^3.2.0",
-    "nock": "^9.0.13",
-    "request": "^2.81.0",
-    "request-promise": "^4.2.0",
-    "sinon": "^2.1.0"
+    "hapi": "^17.5.1",
+    "mocha": "^5.2.0",
+    "nock": "^9.3.0",
+    "prettier": "^1.13.4",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "sinon": "^5.1.0"
   },
   "engines": {
-    "node": "^6.9.0"
+    "node": "^8.9.0"
   }
 }
