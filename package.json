@@ -4,7 +4,7 @@
   "description": "Log hapi errors",
   "main": "lib/index.js",
   "scripts": {
-    "prepublish": "npm run compile",
+    "prepublishOnly": "npm run compile",
     "compile": "rm -rf ./lib && babel -d ./lib ./source -s",
     "test": "NODE_ENV=test mocha 'test/**/*.js'",
     "_eslint": "eslint . --cache --cache-location ./node_modules/.cache/eslintcache",
